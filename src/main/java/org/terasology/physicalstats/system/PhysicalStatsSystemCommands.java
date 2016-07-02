@@ -99,4 +99,20 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
                     (PhysicalStatsComponent.class).endurance = amount;
         }
     }
+
+    @Command(shortDescription = "Set physical CHA stat.", runOnServer = true)
+    public void setCHA(@CommandParam("amount") int amount) {
+        if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
+            CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
+                    (PhysicalStatsComponent.class).charisma = amount;
+        }
+    }
+
+    @Command(shortDescription = "Set physical LUK stat.", runOnServer = true)
+    public void setLUK(@CommandParam("amount") int amount) {
+        if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
+            CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
+                    (PhysicalStatsComponent.class).luck = amount;
+        }
+    }
 }
