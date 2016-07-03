@@ -1,0 +1,14 @@
+{
+    "id" : "PhysicalStats",
+    "version" : "0.1.0-SNAPSHOT",
+    "author" : "XTariq",
+    "displayName" : "PhysicalStats",
+    "description" : "Adds a basic RPG stat system for seven physical attributes or stats.",
+    "dependencies" : [
+        {
+            "id" : "Core",
+            "minVersion" : "1.0.0"
+        }
+    ],
+    "serverSideOnly" : false
+}

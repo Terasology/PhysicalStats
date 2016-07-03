@@ -27,6 +27,7 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.physicalstats.component.PhysicalStatsComponent;
 import org.terasology.physicalstats.event.OnAgilityChangedEvent;
 import org.terasology.physicalstats.event.OnConstitutionChangedEvent;
+import org.terasology.physicalstats.event.OnPhysicalStatChangedEvent;
 import org.terasology.physicalstats.event.OnStrengthChangedEvent;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
@@ -57,14 +58,18 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
             player.getComponent(PhysicalStatsComponent.class).strength = amount;
 
             player.send(new OnStrengthChangedEvent(player, player, oldValue, amount));
+            player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
     @Command(shortDescription = "Set physical DEX stat.", runOnServer = true)
     public void setDEX(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
+            EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
+
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).dexterity = amount;
+            player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
@@ -77,6 +82,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
             player.getComponent(PhysicalStatsComponent.class).constitution = amount;
 
             player.send(new OnConstitutionChangedEvent(player, player, oldValue, amount));
+            player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
@@ -89,30 +95,43 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
             player.getComponent(PhysicalStatsComponent.class).agility = amount;
 
             player.send(new OnAgilityChangedEvent(player, player, oldValue, amount));
+            player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
     @Command(shortDescription = "Set physical END stat.", runOnServer = true)
     public void setEND(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
+            EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
+
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).endurance = amount;
+
+            player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
     @Command(shortDescription = "Set physical CHA stat.", runOnServer = true)
     public void setCHA(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
+            EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
+
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).charisma = amount;
+
+            player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
     @Command(shortDescription = "Set physical LUK stat.", runOnServer = true)
     public void setLUK(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
+            EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
+
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).luck = amount;
+
+            player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 }

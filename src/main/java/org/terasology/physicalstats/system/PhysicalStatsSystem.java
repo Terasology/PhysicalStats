@@ -15,6 +15,7 @@
  */
 package org.terasology.physicalstats.system;
 
+import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -27,6 +28,8 @@ import org.terasology.logic.health.BeforeDamagedEvent;
 import org.terasology.logic.health.HealthComponent;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.physicalstats.component.PhysicalStatsComponent;
+import org.terasology.physicalstats.component.PhysicalStatsModifier;
+import org.terasology.physicalstats.component.PhysicalStatsModifyEffect;
 import org.terasology.physicalstats.event.OnConstitutionChangedEvent;
 import org.terasology.registry.In;
 
@@ -36,6 +39,9 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
 
     @In
     private EntityManager entityManager;
+
+    @In
+    private Context context;
 
     @Override
     public void initialise() {
@@ -59,6 +65,11 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
             HealthComponent h = player.getComponent(HealthComponent.class);
             h.maxHealth = eq.constitution * 10;
             h.currentHealth = h.maxHealth;
+
+            // TODO: Remove after testing is complete.
+            PhysicalStatsModifyEffect modifyEffect = new PhysicalStatsModifyEffect(context);
+            modifyEffect.applyMod(player, player,
+                    new PhysicalStatsModifier("TEST BUFF", 10, 0, 0, 0, 0, 0, 50), -1);
         }
     }
 
