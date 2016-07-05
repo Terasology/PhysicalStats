@@ -29,6 +29,7 @@ import org.terasology.logic.health.HealthComponent;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.physicalstats.component.PhysicalStatsComponent;
 import org.terasology.physicalstats.component.PhysicalStatsModifier;
+import org.terasology.physicalstats.component.PhysicalStatsModifierComponent;
 import org.terasology.physicalstats.component.PhysicalStatsModifyEffect;
 import org.terasology.physicalstats.event.OnConstitutionChangedEvent;
 import org.terasology.registry.In;
@@ -78,6 +79,10 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         if (player.hasComponent(HealthComponent.class)) {
             HealthComponent h = player.getComponent(HealthComponent.class);
             h.maxHealth = phy.constitution * 10;
+
+            if (h.currentHealth > h.maxHealth) {
+                h.currentHealth = h.maxHealth;
+            }
         }
     }
 
@@ -85,12 +90,36 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
     public void impactOnPhysicalDamage(BeforeDamagedEvent event, EntityRef damageTarget) {
         if (event.getInstigator().hasComponent(PhysicalStatsComponent.class)) {
             PhysicalStatsComponent phy = event.getInstigator().getComponent(PhysicalStatsComponent.class);
-            event.add(phy.strength / 2f);
+
+            if (!event.getInstigator().hasComponent(PhysicalStatsModifierComponent.class)) {
+                event.add(phy.strength / 2f);
+            } else {
+                PhysicalStatsModifierComponent mods =
+                        event.getInstigator().getComponent(PhysicalStatsModifierComponent.class);
+
+                int totalStrength = phy.strength;
+                for (PhysicalStatsModifier mod : mods.modifiers.values()) {
+                    totalStrength += mod.strength;
+                }
+
+                event.add(totalStrength / 2f);
+            }
         }
     }
 
     @ReceiveEvent
-    public void impactOnSpeed(GetMaxSpeedEvent event, EntityRef entit, PhysicalStatsComponent phy) {
-        event.add(Math.max(-1, (phy.agility - 10) / 10f));
+    public void impactOnSpeed(GetMaxSpeedEvent event, EntityRef entity, PhysicalStatsComponent phy) {
+        if (!entity.hasComponent(PhysicalStatsModifierComponent.class)) {
+            event.add(Math.max(-1, (phy.agility - 10) / 10f));
+        } else {
+            PhysicalStatsModifierComponent mods = entity.getComponent(PhysicalStatsModifierComponent.class);
+
+            int totalAgility = phy.agility;
+            for (PhysicalStatsModifier mod : mods.modifiers.values()) {
+                totalAgility += mod.agility;
+            }
+
+            event.add(Math.max(-1, (totalAgility - 10) / 10f));
+        }
     }
 }
