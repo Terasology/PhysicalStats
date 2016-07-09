@@ -66,11 +66,6 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
             HealthComponent h = player.getComponent(HealthComponent.class);
             h.maxHealth = eq.constitution * 10;
             h.currentHealth = h.maxHealth;
-
-            // TODO: Remove after testing is complete.
-            PhysicalStatsModifyEffect modifyEffect = new PhysicalStatsModifyEffect(context);
-            modifyEffect.applyMod(player, player,
-                    new PhysicalStatsModifier("TEST BUFF", 10, 0, 0, 0, 0, 0, 50), -1);
         }
     }
 
