@@ -23,6 +23,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.console.commandSystem.annotations.Command;
 import org.terasology.logic.console.commandSystem.annotations.CommandParam;
+import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.physicalstats.component.PhysicalStatsComponent;
 import org.terasology.physicalstats.event.OnAgilityChangedEvent;
@@ -39,7 +40,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    @Command(shortDescription = "Show all stats of the local player", runOnServer = true)
+    @Command(shortDescription = "Show all stats of the local player", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void getPlayerStats() {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             PhysicalStatsComponent p = CoreRegistry.get(LocalPlayer.class).getCharacterEntity().
@@ -49,7 +50,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
-    @Command(shortDescription = "Set physical STR stat.", runOnServer = true)
+    @Command(shortDescription = "Set physical STR stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void setSTR(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -62,7 +63,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
-    @Command(shortDescription = "Set physical DEX stat.", runOnServer = true)
+    @Command(shortDescription = "Set physical DEX stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void setDEX(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -73,7 +74,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
-    @Command(shortDescription = "Set physical CON stat.", runOnServer = true)
+    @Command(shortDescription = "Set physical CON stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void setCON(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -86,7 +87,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
-    @Command(shortDescription = "Set physical AGI stat.", runOnServer = true)
+    @Command(shortDescription = "Set physical AGI stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void setAGI(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -99,7 +100,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
-    @Command(shortDescription = "Set physical END stat.", runOnServer = true)
+    @Command(shortDescription = "Set physical END stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void setEND(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -111,7 +112,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
-    @Command(shortDescription = "Set physical CHA stat.", runOnServer = true)
+    @Command(shortDescription = "Set physical CHA stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void setCHA(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -123,7 +124,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
-    @Command(shortDescription = "Set physical LUK stat.", runOnServer = true)
+    @Command(shortDescription = "Set physical LUK stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
     public void setLUK(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
