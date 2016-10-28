@@ -40,17 +40,18 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    @Command(shortDescription = "Show all stats of the local player", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Show all stats of the local player", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void getPlayerStats() {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             PhysicalStatsComponent p = CoreRegistry.get(LocalPlayer.class).getCharacterEntity().
                     getComponent(PhysicalStatsComponent.class);
+
             logger.info("STR: " + p.strength + " DEX: " + p.dexterity + " END: " + p.endurance + " CON: "
                     + p.constitution + " AGI: " + p.agility + " CHA: " + p.charisma + " LUK: " + p.luck);
         }
     }
 
-    @Command(shortDescription = "Set physical STR stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Set physical STR stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setSTR(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -58,23 +59,29 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
             int oldValue = player.getComponent(PhysicalStatsComponent.class).strength;
             player.getComponent(PhysicalStatsComponent.class).strength = amount;
 
+            logger.info("STR changed from " + oldValue + " to " + amount);
+
             player.send(new OnStrengthChangedEvent(player, player, oldValue, amount));
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
-    @Command(shortDescription = "Set physical DEX stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Set physical DEX stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setDEX(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            int oldValue = player.getComponent(PhysicalStatsComponent.class).constitution;
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).dexterity = amount;
+
+            logger.info("DEX changed from " + oldValue + " to " + amount);
+
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
-    @Command(shortDescription = "Set physical CON stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Set physical CON stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setCON(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -82,12 +89,14 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
             int oldValue = player.getComponent(PhysicalStatsComponent.class).constitution;
             player.getComponent(PhysicalStatsComponent.class).constitution = amount;
 
+            logger.info("CON changed from " + oldValue + " to " + amount);
+
             player.send(new OnConstitutionChangedEvent(player, player, oldValue, amount));
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
-    @Command(shortDescription = "Set physical AGI stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Set physical AGI stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setAGI(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
@@ -95,42 +104,53 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
             int oldValue = player.getComponent(PhysicalStatsComponent.class).agility;
             player.getComponent(PhysicalStatsComponent.class).agility = amount;
 
+            logger.info("AGI changed from " + oldValue + " to " + amount);
+
             player.send(new OnAgilityChangedEvent(player, player, oldValue, amount));
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
-    @Command(shortDescription = "Set physical END stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Set physical END stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setEND(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            int oldValue = player.getComponent(PhysicalStatsComponent.class).endurance;
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).endurance = amount;
+
+            logger.info("END changed from " + oldValue + " to " + amount);
 
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
-    @Command(shortDescription = "Set physical CHA stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Set physical CHA stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setCHA(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            int oldValue = player.getComponent(PhysicalStatsComponent.class).charisma;
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).charisma = amount;
+
+            logger.info("CHA changed from " + oldValue + " to " + amount);
 
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
-    @Command(shortDescription = "Set physical LUK stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION, runOnServer = true)
+    @Command(shortDescription = "Set physical LUK stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setLUK(@CommandParam("amount") int amount) {
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            int oldValue = player.getComponent(PhysicalStatsComponent.class).luck;
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).luck = amount;
+
+            logger.info("LUK changed from " + oldValue + " to " + amount);
 
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }

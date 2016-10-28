@@ -17,12 +17,12 @@ package org.terasology.physicalstats.event;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
-import org.terasology.physicalstats.component.PhysicalStatsModifier;
+import org.terasology.physicalstats.component.PhysicalStatsModifierComponent;
 
 public class OnPhysicalStatsModifierRemovedEvent implements Event {
     private EntityRef instigator;
     private EntityRef character;
-    private PhysicalStatsModifier pModifier;
+    private PhysicalStatsModifierComponent pModifier;
 
     public OnPhysicalStatsModifierRemovedEvent() {
 
@@ -37,7 +37,7 @@ public class OnPhysicalStatsModifierRemovedEvent implements Event {
         this.character = character;
     }
 
-    public OnPhysicalStatsModifierRemovedEvent(EntityRef instigator, EntityRef character, PhysicalStatsModifier pModifier) {
+    public OnPhysicalStatsModifierRemovedEvent(EntityRef instigator, EntityRef character, PhysicalStatsModifierComponent pModifier) {
         this.instigator = instigator;
         this.character = character;
         this.pModifier = pModifier;

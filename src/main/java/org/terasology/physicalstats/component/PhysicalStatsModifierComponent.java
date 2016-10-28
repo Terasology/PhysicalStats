@@ -16,10 +16,32 @@
 package org.terasology.physicalstats.component;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.network.Replicate;
+import org.terasology.reflection.MappedContainer;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@MappedContainer
 public class PhysicalStatsModifierComponent implements Component {
-    public Map<String, PhysicalStatsModifier> modifiers = new HashMap<String, PhysicalStatsModifier>();
+    @Replicate
+    public String id;
+
+    @Replicate
+    public int strength;
+
+    @Replicate
+    public int dexterity;
+
+    @Replicate
+    public int constitution;
+
+    @Replicate
+    public int agility;
+
+    @Replicate
+    public int endurance;
+
+    @Replicate
+    public int charisma;
+
+    @Replicate
+    public int luck;
 }

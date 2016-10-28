@@ -15,8 +15,11 @@
  */
 package org.terasology.physicalstats.component;
 
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.Component;
 
-public interface IPhysicalStatsModifyEffect {
-    void applyMod(EntityRef instigator, EntityRef entity, PhysicalStatsModifierComponent magnitude, long duration);
+import java.util.HashMap;
+import java.util.Map;
+
+public class PhysicalStatsModifiersListComponent implements Component {
+    public Map<String, PhysicalStatsModifierComponent> modifiers = new HashMap<String, PhysicalStatsModifierComponent>();
 }

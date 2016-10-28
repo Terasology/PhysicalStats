@@ -19,8 +19,6 @@ import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.health.HealthComponent;
-import org.terasology.math.TeraMath;
 import org.terasology.physicalstats.event.OnPhysicalStatsModifierAddedEvent;
 import org.terasology.physicalstats.event.OnPhysicalStatsModifierRemovedEvent;
 
@@ -34,11 +32,11 @@ public class PhysicalStatsModifyEffect implements IPhysicalStatsModifyEffect {
     }
 
     @Override
-    public void applyMod(EntityRef instigator, EntityRef entity, PhysicalStatsModifier magnitude, long duration) {
-        PhysicalStatsModifierComponent modifier = entity.getComponent(PhysicalStatsModifierComponent.class);
+    public void applyMod(EntityRef instigator, EntityRef entity, PhysicalStatsModifierComponent magnitude, long duration) {
+        PhysicalStatsModifiersListComponent modifier = entity.getComponent(PhysicalStatsModifiersListComponent.class);
 
         if (modifier == null) {
-            modifier = new PhysicalStatsModifierComponent();
+            modifier = new PhysicalStatsModifiersListComponent();
             entity.addComponent(modifier);
         }
 
@@ -59,13 +57,13 @@ public class PhysicalStatsModifyEffect implements IPhysicalStatsModifyEffect {
     }
 
     public static void removeMod(EntityRef instigator, EntityRef entity, String id) {
-        PhysicalStatsModifierComponent modifier = entity.getComponent(PhysicalStatsModifierComponent.class);
+        PhysicalStatsModifiersListComponent modifier = entity.getComponent(PhysicalStatsModifiersListComponent.class);
 
         if (modifier == null || modifier.modifiers.get(id) == null) {
             return;
         }
 
-        PhysicalStatsModifier temp = modifier.modifiers.get(id);
+        PhysicalStatsModifierComponent temp = modifier.modifiers.get(id);
         modifier.modifiers.remove(id);
 
         entity.send(new OnPhysicalStatsModifierRemovedEvent(instigator, entity, temp));
