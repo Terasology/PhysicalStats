@@ -33,8 +33,14 @@ import org.terasology.physicalstats.component.PhysicalStatsModifiersListComponen
 import org.terasology.physicalstats.event.OnConstitutionChangedEvent;
 import org.terasology.registry.In;
 
+/**
+ * This system handles the initialization of physical stats and the impact they have on certain actions.
+ */
 @RegisterSystem
 public class PhysicalStatsSystem extends BaseComponentSystem {
+    /**
+     * Define a logger for logging debug information about this system.
+     */
     private static final Logger logger = LoggerFactory.getLogger(PhysicalStatsSystem.class);
 
     @In
@@ -43,12 +49,19 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
     @In
     private Context context;
 
+    /**
+     * For every entity that has the PhysicalStatsComponent, initialize several characterstics that are affected by
+     * having this component. This includes the max health for example.
+     */
     @Override
     public void initialise() {
         for (EntityRef clientEntity : entityManager.getEntitiesWith(PhysicalStatsComponent.class)) {
+            // For every entity that has a health component, set their max health equal to CON * 10.
             if (clientEntity.hasComponent(HealthComponent.class)) {
                 HealthComponent h = clientEntity.getComponent(HealthComponent.class);
 
+                // This check is in place so that the current health isn't reset to max health when reloading a game
+                // save. It should only be done when the two are already equal.
                 if (h.currentHealth == h.maxHealth) {
                     h.maxHealth = clientEntity.getComponent(PhysicalStatsComponent.class).constitution * 10;
                     h.currentHealth = h.maxHealth;
@@ -59,20 +72,40 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         super.initialise();
     }
 
+    /**
+     * When an entity (with physical stats) has been spawned following world generation or respawned following death,
+     * perform some initialization tasks related to their stats.
+     *
+     * @param event     Event indicating the player has just been spawned.
+     * @param player    Reference to the player entity that has been spawned.
+     * @param phyStats  The physical stats of the player entity.
+     */
     @ReceiveEvent
-    public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, PhysicalStatsComponent eq) {
+    public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, PhysicalStatsComponent phyStats) {
+        // If the player entity has a health component, make sure that the max health is equal to CON * 10, and the
+        // current health is equal to the maximum.
         if (player.hasComponent(HealthComponent.class)) {
             HealthComponent h = player.getComponent(HealthComponent.class);
-            h.maxHealth = eq.constitution * 10;
+            h.maxHealth = phyStats.constitution * 10;
             h.currentHealth = h.maxHealth;
         }
     }
 
+    /**
+     * When a character entity's (with physical stats) constitution attribute is changed, update the related stats like
+     * health.
+     *
+     * @param event     Event indicating the character's constitution has been altered.
+     * @param player    Reference to the character entity that was affected.
+     * @param phyStats  The physical stats of the character entity.
+     */
     @ReceiveEvent
-    public void onCONChanged(OnConstitutionChangedEvent event, EntityRef player, PhysicalStatsComponent phy) {
+    public void onCONChanged(OnConstitutionChangedEvent event, EntityRef player, PhysicalStatsComponent phyStats) {
+        // If the player entity has a health component, make sure that the max health is equal to CON * 10, and if the
+        // current health is above the maximum health, set the current equal to the max.
         if (player.hasComponent(HealthComponent.class)) {
             HealthComponent h = player.getComponent(HealthComponent.class);
-            h.maxHealth = phy.constitution * 10;
+            h.maxHealth = phyStats.constitution * 10;
 
             if (h.currentHealth > h.maxHealth) {
                 h.currentHealth = h.maxHealth;
@@ -80,39 +113,66 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Before this entity deals damage to another entity, apply the impact that their total strength attribute has on
+     * the total or final damage value.
+     *
+     * @param event         Event with information of the instigator and current base damage (without stat influence).
+     * @param damageTarget  Entity that's being targeted for an attack.
+     */
     @ReceiveEvent
     public void impactOnPhysicalDamage(BeforeDamagedEvent event, EntityRef damageTarget) {
+        // Ensure that the instigator entity actually has physical stats. If not, then STR will be non-existent.
         if (event.getInstigator().hasComponent(PhysicalStatsComponent.class)) {
             PhysicalStatsComponent phy = event.getInstigator().getComponent(PhysicalStatsComponent.class);
 
+            // If the instigator has no physical stats modifiers, then directly add the (base strength / 2) to the
+            // total damage value.
             if (!event.getInstigator().hasComponent(PhysicalStatsModifiersListComponent.class)) {
                 event.add(phy.strength / 2f);
             } else {
+                // Otherwise, get the list of physical stats modifiers applied to this entity.
                 PhysicalStatsModifiersListComponent mods =
                         event.getInstigator().getComponent(PhysicalStatsModifiersListComponent.class);
 
+                // Tally up the base strength and all the strength modifiers into the totalStrength variable.
                 int totalStrength = phy.strength;
                 for (PhysicalStatsModifierComponent mod : mods.modifiers.values()) {
                     totalStrength += mod.strength;
                 }
 
+                // Add the total strength to the total damage value.
                 event.add(totalStrength / 2f);
             }
         }
     }
 
+    /**
+     * Before this entity (with physical stats) moves, apply the impact that their total agility attribute has on their
+     * maximum movement speed.
+     *
+     * @param event     Event with information of the current (and modifiable) movement speed.
+     * @param entity    Entity that's intending to move.
+     * @param phy       The physical stats of the entity.
+     */
     @ReceiveEvent
     public void impactOnSpeed(GetMaxSpeedEvent event, EntityRef entity, PhysicalStatsComponent phy) {
+        // If this entity has no physical stats modifiers, then directly add the agility attribute to the max movement
+        // speed. -1 is the minimum effect agility can have on the max speed. Every 10 AGI should increase the max
+        // movement speed by 100$.
         if (!entity.hasComponent(PhysicalStatsModifiersListComponent.class)) {
             event.add(Math.max(-1, (phy.agility - 10) / 10f));
         } else {
+            // Otherwise, get the list of physical stats modifiers applied to this entity.
             PhysicalStatsModifiersListComponent mods = entity.getComponent(PhysicalStatsModifiersListComponent.class);
 
+            // Tally up the base agility and all the agility modifiers into the totalAgility variable.
             int totalAgility = phy.agility;
             for (PhysicalStatsModifierComponent mod : mods.modifiers.values()) {
                 totalAgility += mod.agility;
             }
 
+            // Add the total agility to the total damage value.
             event.add(Math.max(-1, (totalAgility - 10) / 10f));
         }
     }

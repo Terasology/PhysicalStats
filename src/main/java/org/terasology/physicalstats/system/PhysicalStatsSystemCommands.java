@@ -33,15 +33,26 @@ import org.terasology.physicalstats.event.OnStrengthChangedEvent;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 
+/**
+ * This system handles cheat or debug commands related to the physical stats system.
+ */
 @RegisterSystem
 public class PhysicalStatsSystemCommands extends BaseComponentSystem {
+    /**
+     * Define a logger for logging debug information about this system.
+     */
     private static final Logger logger = LoggerFactory.getLogger(PhysicalStatsSystemCommands.class);
 
     @In
     private EntityManager entityManager;
 
+    /**
+     * Print all of the current base physical stats of the local player to the console window.
+     */
     @Command(shortDescription = "Show all stats of the local player", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void getPlayerStats() {
+        // Get the local player's character entity, and get the PhysicalStatsComponent from it to print the base stat
+        // attributes.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             PhysicalStatsComponent p = CoreRegistry.get(LocalPlayer.class).getCharacterEntity().
                     getComponent(PhysicalStatsComponent.class);
@@ -51,107 +62,177 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Set the local player's base strength attribute to the given amount.
+     *
+     * @param amount    The new strength value.
+     */
     @Command(shortDescription = "Set physical STR stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setSTR(@CommandParam("amount") int amount) {
+        // Get the local player's character entity, and check to see whether it has physical stats. If so, continue in
+        // this if-block.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            // Store the old strength value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).strength;
             player.getComponent(PhysicalStatsComponent.class).strength = amount;
 
+            // Print the change to the console.
             logger.info("STR changed from " + oldValue + " to " + amount);
 
+            // Send two events to the player entity. The first for indicating that the strength has been changed.
+            // The second for indicating that a physical stat has been changed.
             player.send(new OnStrengthChangedEvent(player, player, oldValue, amount));
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
+    /**
+     * Set the local player's base dexterity attribute to the given amount.
+     *
+     * @param amount    The new dexterity value.
+     */
     @Command(shortDescription = "Set physical DEX stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setDEX(@CommandParam("amount") int amount) {
+        // Get the local player's character entity, and check to see whether it has physical stats. If so, continue in
+        // this if-block.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            // Store the old dexterity value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).constitution;
             CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
                     (PhysicalStatsComponent.class).dexterity = amount;
 
+            // Print the change to the console.
             logger.info("DEX changed from " + oldValue + " to " + amount);
 
+            // Send an event to the player entity indicating that a physical stat has been changed.
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
+    /**
+     * Set the local player's base constitution attribute to the given amount.
+     *
+     * @param amount    The new constitution value.
+     */
     @Command(shortDescription = "Set physical CON stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setCON(@CommandParam("amount") int amount) {
+        // Get the local player's character entity, and check to see whether it has physical stats. If so, continue in
+        // this if-block.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            // Store the old constitution value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).constitution;
             player.getComponent(PhysicalStatsComponent.class).constitution = amount;
 
+            // Print the change to the console.
             logger.info("CON changed from " + oldValue + " to " + amount);
 
+            // Send two events to the player entity. The first for indicating that the constitution has been changed.
+            // The second for indicating that a physical stat has been changed.
             player.send(new OnConstitutionChangedEvent(player, player, oldValue, amount));
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
+    /**
+     * Set the local player's base agility attribute to the given amount.
+     *
+     * @param amount    The new agility value.
+     */
     @Command(shortDescription = "Set physical AGI stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setAGI(@CommandParam("amount") int amount) {
+        // Get the local player's character entity, and check to see whether it has physical stats. If so, continue in
+        // this if-block.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            // Store the old agility value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).agility;
             player.getComponent(PhysicalStatsComponent.class).agility = amount;
 
+            // Print the change to the console.
             logger.info("AGI changed from " + oldValue + " to " + amount);
 
+            // Send two events to the player entity. The first for indicating that the agility has been changed.
+            // The second for indicating that a physical stat has been changed.
             player.send(new OnAgilityChangedEvent(player, player, oldValue, amount));
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
+    /**
+     * Set the local player's base endurance attribute to the given amount.
+     *
+     * @param amount    The new endurance value.
+     */
     @Command(shortDescription = "Set physical END stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setEND(@CommandParam("amount") int amount) {
+        // Get the local player's character entity, and check to see whether it has physical stats. If so, continue in
+        // this if-block.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            // Store the old endurance value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).endurance;
-            CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
-                    (PhysicalStatsComponent.class).endurance = amount;
+            player.getComponent(PhysicalStatsComponent.class).endurance = amount;
 
+            // Print the change to the console.
             logger.info("END changed from " + oldValue + " to " + amount);
 
+            // Send an event to the player entity indicating that a physical stat has been changed.
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
+    /**
+     * Set the local player's base charisma attribute to the given amount.
+     *
+     * @param amount    The new charisma value.
+     */
     @Command(shortDescription = "Set physical CHA stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setCHA(@CommandParam("amount") int amount) {
+        // Get the local player's character entity, and check to see whether it has physical stats. If so, continue in
+        // this if-block.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            // Store the old charisma value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).charisma;
-            CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
-                    (PhysicalStatsComponent.class).charisma = amount;
+            player.getComponent(PhysicalStatsComponent.class).charisma = amount;
 
+            // Print the change to the console.
             logger.info("CHA changed from " + oldValue + " to " + amount);
 
+            // Send an event to the player entity indicating that a physical stat has been changed.
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
 
+    /**
+     * Set the local player's base luck attribute to the given amount.
+     *
+     * @param amount    The new luck value.
+     */
     @Command(shortDescription = "Set physical LUK stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setLUK(@CommandParam("amount") int amount) {
+        // Get the local player's character entity, and check to see whether it has physical stats. If so, continue in
+        // this if-block.
         if (CoreRegistry.get(LocalPlayer.class).getCharacterEntity().hasComponent(PhysicalStatsComponent.class)) {
             EntityRef player = CoreRegistry.get(LocalPlayer.class).getCharacterEntity();
 
+            // Store the old luck value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).luck;
-            CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
-                    (PhysicalStatsComponent.class).luck = amount;
+            player.getComponent(PhysicalStatsComponent.class).luck = amount;
 
+            // Print the change to the console.
             logger.info("LUK changed from " + oldValue + " to " + amount);
 
+            // Send an event to the player entity indicating that a physical stat has been changed.
             player.send(new OnPhysicalStatChangedEvent(player, player));
         }
     }
