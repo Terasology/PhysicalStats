@@ -34,18 +34,22 @@ public class PhysicalStatsModifyEffect implements IPhysicalStatsModifyEffect {
 
     /**
      * Create an instance of this class using the passed in Context to get the Time and DelayManager instances.
-     * @param context
+     *
+     * @param context   Reference to the current context that this object is running in.
      */
     public PhysicalStatsModifyEffect(Context context) {
         this.time = context.get(Time.class);
         this.delayManager = context.get(DelayManager.class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void applyMod(EntityRef instigator, EntityRef entity, PhysicalStatsModifierComponent magnitude, long duration) {
+    public void applyMod(EntityRef instigator, EntityRef entity, PhysicalStatsModifierComponent modifier, long duration) {
+        // If the duration is less than or equal to 0, exit out of this method immediately as this is an invalid value
+        // for duration.
+        if (duration <= 0) {
+            return;
+        }
+
         // Get the list of physical stats modifiers on this entity.
         PhysicalStatsModifiersListComponent modifiersList =
                 entity.getComponent(PhysicalStatsModifiersListComponent.class);
@@ -58,17 +62,17 @@ public class PhysicalStatsModifyEffect implements IPhysicalStatsModifyEffect {
 
         // If a modifier with this ID doesn't already exist in the list, add the modifier to the list. oOtherwise,
         // replace the old modifier with this new one.
-        if (modifiersList.modifiers.get(magnitude.id) == null) {
-            modifiersList.modifiers.put(magnitude.id, magnitude);
+        if (modifiersList.modifiers.get(modifier.id) == null) {
+            modifiersList.modifiers.put(modifier.id, modifier);
         } else {
-            modifiersList.modifiers.replace(magnitude.id, magnitude);
+            modifiersList.modifiers.replace(modifier.id, modifier);
         }
 
         // If the duration is greater than or equal to 0, add this to the DelayManager. This indicates that the effect
         // is temporary. Otherwise, the effect will be treated as permanent unless another entity manually removes the
         // effect.
         if (duration >= 0) {
-            delayManager.addDelayedAction(entity, "" + magnitude.id, duration);
+            delayManager.addDelayedAction(entity, "" + modifier.id, duration);
         }
 
         // Add/save the modifiers list
@@ -76,7 +80,35 @@ public class PhysicalStatsModifyEffect implements IPhysicalStatsModifyEffect {
         entity.saveComponent(modifiersList);
 
         // Send an event to the affected entity alerting that a physical stats modifier has been added to it.
-        entity.send(new OnPhysicalStatsModifierAddedEvent(instigator, entity, magnitude));
+        entity.send(new OnPhysicalStatsModifierAddedEvent(instigator, entity, modifier));
+    }
+
+    @Override
+    public void applyMod(EntityRef instigator, EntityRef entity, PhysicalStatsModifierComponent modifier) {
+        // Get the list of physical stats modifiers on this entity.
+        PhysicalStatsModifiersListComponent modifiersList =
+                entity.getComponent(PhysicalStatsModifiersListComponent.class);
+
+        // If the list is null, create a new list and add the list to the entity.
+        if (modifiersList == null) {
+            modifiersList = new PhysicalStatsModifiersListComponent();
+            entity.addComponent(modifiersList);
+        }
+
+        // If a modifier with this ID doesn't already exist in the list, add the modifier to the list. oOtherwise,
+        // replace the old modifier with this new one.
+        if (modifiersList.modifiers.get(modifier.id) == null) {
+            modifiersList.modifiers.put(modifier.id, modifier);
+        } else {
+            modifiersList.modifiers.replace(modifier.id, modifier);
+        }
+
+        // Add/save the modifiers list
+        entity.addOrSaveComponent(modifiersList);
+        entity.saveComponent(modifiersList);
+
+        // Send an event to the affected entity alerting that a physical stats modifier has been added to it.
+        entity.send(new OnPhysicalStatsModifierAddedEvent(instigator, entity, modifier));
     }
 
     /**
