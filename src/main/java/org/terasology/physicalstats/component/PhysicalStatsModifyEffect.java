@@ -44,10 +44,9 @@ public class PhysicalStatsModifyEffect implements IPhysicalStatsModifyEffect {
 
     @Override
     public void applyMod(EntityRef instigator, EntityRef entity, PhysicalStatsModifierComponent modifier, long duration) {
-        // If the duration is less than or equal to 0, exit out of this method immediately as this is an invalid value
-        // for duration.
+        // If the duration is less than or equal to 0, throw an exception as this is an invalid value for duration.
         if (duration <= 0) {
-            return;
+            throw(new IllegalArgumentException("The inputted duration of " + duration + " falls outside the permitted boundaries."));
         }
 
         // Get the list of physical stats modifiers on this entity.
