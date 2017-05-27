@@ -65,6 +65,7 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
                 if (h.currentHealth == h.maxHealth) {
                     h.maxHealth = clientEntity.getComponent(PhysicalStatsComponent.class).constitution * 10;
                     h.currentHealth = h.maxHealth;
+                    clientEntity.saveComponent(h);
                 }
             }
         }
@@ -111,6 +112,7 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
             if (h.currentHealth > h.maxHealth) {
                 h.currentHealth = h.maxHealth;
             }
+            player.saveComponent(h);
         }
     }
 
