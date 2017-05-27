@@ -88,6 +88,7 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
             HealthComponent h = player.getComponent(HealthComponent.class);
             h.maxHealth = phyStats.constitution * 10;
             h.currentHealth = h.maxHealth;
+            player.saveComponent(h);
         }
     }
 
