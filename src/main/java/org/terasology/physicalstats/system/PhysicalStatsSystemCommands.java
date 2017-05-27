@@ -76,8 +76,9 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
 
             // Store the old strength value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).strength;
-            player.getComponent(PhysicalStatsComponent.class).strength = amount;
-
+            PhysicalStatsComponent physicalStatsComponent = player.getComponent(PhysicalStatsComponent.class);
+            physicalStatsComponent.strength = amount;
+            player.saveComponent(physicalStatsComponent);
             // Print the change to the console.
             logger.info("STR changed from " + oldValue + " to " + amount);
 
@@ -102,8 +103,9 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
 
             // Store the old dexterity value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).constitution;
-            CoreRegistry.get(LocalPlayer.class).getCharacterEntity().getComponent
-                    (PhysicalStatsComponent.class).dexterity = amount;
+            PhysicalStatsComponent physicalStatsComponent = player.getComponent(PhysicalStatsComponent.class);
+            physicalStatsComponent.dexterity = amount;
+            player.saveComponent(physicalStatsComponent);
 
             // Print the change to the console.
             logger.info("DEX changed from " + oldValue + " to " + amount);
@@ -127,7 +129,9 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
 
             // Store the old constitution value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).constitution;
-            player.getComponent(PhysicalStatsComponent.class).constitution = amount;
+            PhysicalStatsComponent physicalStatsComponent = player.getComponent(PhysicalStatsComponent.class);
+            physicalStatsComponent.constitution = amount;
+            player.saveComponent(physicalStatsComponent);
 
             // Print the change to the console.
             logger.info("CON changed from " + oldValue + " to " + amount);
@@ -153,7 +157,9 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
 
             // Store the old agility value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).agility;
-            player.getComponent(PhysicalStatsComponent.class).agility = amount;
+            PhysicalStatsComponent physicalStatsComponent = player.getComponent(PhysicalStatsComponent.class);
+            physicalStatsComponent.agility = amount;
+            player.saveComponent(physicalStatsComponent);
 
             // Print the change to the console.
             logger.info("AGI changed from " + oldValue + " to " + amount);
@@ -179,7 +185,9 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
 
             // Store the old endurance value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).endurance;
-            player.getComponent(PhysicalStatsComponent.class).endurance = amount;
+            PhysicalStatsComponent physicalStatsComponent = player.getComponent(PhysicalStatsComponent.class);
+            physicalStatsComponent.endurance = amount;
+            player.saveComponent(physicalStatsComponent);
 
             // Print the change to the console.
             logger.info("END changed from " + oldValue + " to " + amount);
@@ -203,7 +211,9 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
 
             // Store the old charisma value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).charisma;
-            player.getComponent(PhysicalStatsComponent.class).charisma = amount;
+            PhysicalStatsComponent physicalStatsComponent = player.getComponent(PhysicalStatsComponent.class);
+            physicalStatsComponent.charisma = amount;
+            player.saveComponent(physicalStatsComponent);
 
             // Print the change to the console.
             logger.info("CHA changed from " + oldValue + " to " + amount);
@@ -227,7 +237,9 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
 
             // Store the old luck value, and replace it with the new one.
             int oldValue = player.getComponent(PhysicalStatsComponent.class).luck;
-            player.getComponent(PhysicalStatsComponent.class).luck = amount;
+            PhysicalStatsComponent physicalStatsComponent = player.getComponent(PhysicalStatsComponent.class);
+            physicalStatsComponent.luck = amount;
+            player.saveComponent(physicalStatsComponent);
 
             // Print the change to the console.
             logger.info("LUK changed from " + oldValue + " to " + amount);
