@@ -59,12 +59,13 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
             // For every entity that has a health component, set their max health equal to CON * 10.
             if (clientEntity.hasComponent(HealthComponent.class)) {
                 HealthComponent h = clientEntity.getComponent(HealthComponent.class);
+                PhysicalStatsComponent p = clientEntity.getComponent(PhysicalStatsComponent.class);
 
-                // This check is in place so that the current health isn't reset to max health when reloading a game
-                // save. It should only be done when the two are already equal.
-                if (h.currentHealth == h.maxHealth) {
-                    h.maxHealth = clientEntity.getComponent(PhysicalStatsComponent.class).constitution * 10;
-                    h.currentHealth = h.maxHealth;
+                // Ensure that the health is set to the appropriate percentage of the appropriate maximum health
+                if (h.maxHealth != p.constitution * 10) {
+                    float hP = (float) h.currentHealth / (float) h.maxHealth;
+                    h.maxHealth = p.constitution * 10;
+                    h.currentHealth = (int) Math.floor(h.maxHealth * hP);
                     clientEntity.saveComponent(h);
                 }
             }
@@ -107,11 +108,10 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         // current health is above the maximum health, set the current equal to the max.
         if (player.hasComponent(HealthComponent.class)) {
             HealthComponent h = player.getComponent(HealthComponent.class);
-            h.maxHealth = phyStats.constitution * 10;
 
-            if (h.currentHealth > h.maxHealth) {
-                h.currentHealth = h.maxHealth;
-            }
+            float hP = (float) h.currentHealth / (float) h.maxHealth;
+            h.maxHealth = phyStats.constitution * 10;
+            h.currentHealth = (int) Math.floor(h.maxHealth * hP);
             player.saveComponent(h);
         }
     }
