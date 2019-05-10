@@ -43,6 +43,11 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      */
     private static final Logger logger = LoggerFactory.getLogger(PhysicalStatsSystem.class);
 
+    /**
+     * The value to multiply the constitution stat by for the maximum health. 10 by default.
+     */
+    public static int constitutionMultiplier = 10;
+
     @In
     private EntityManager entityManager;
 
@@ -76,10 +81,11 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      */
     public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p)
     {
-        if (h.maxHealth != p.constitution * 10) {
+        int newHealth = p.constitution * constitutionMultiplier;
+        if (h.maxHealth != newHealth) {
             float hP = (float) h.currentHealth / (float) h.maxHealth;
-            h.maxHealth = p.constitution * 10;
-            h.currentHealth = (int) Math.floor(h.maxHealth * hP);
+            h.maxHealth = newHealth;
+            h.currentHealth = (int) Math.floor(newHealth * hP);
             e.saveComponent(h);
             return true;
         }
@@ -99,10 +105,7 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         // If the player entity has a health component, make sure that the max health is equal to CON * 10, and the
         // current health is equal to the maximum.
         if (player.hasComponent(HealthComponent.class)) {
-            HealthComponent h = player.getComponent(HealthComponent.class);
-            h.maxHealth = phyStats.constitution * 10;
-            h.currentHealth = h.maxHealth;
-            player.saveComponent(h);
+            updateHealth(player, player.getComponent(HealthComponent.class), phyStats);
         }
     }
 
