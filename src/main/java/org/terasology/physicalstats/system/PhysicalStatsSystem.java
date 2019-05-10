@@ -60,18 +60,30 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
             if (clientEntity.hasComponent(HealthComponent.class)) {
                 HealthComponent h = clientEntity.getComponent(HealthComponent.class);
                 PhysicalStatsComponent p = clientEntity.getComponent(PhysicalStatsComponent.class);
-
-                // Ensure that the health is set to the appropriate percentage of the appropriate maximum health
-                if (h.maxHealth != p.constitution * 10) {
-                    float hP = (float) h.currentHealth / (float) h.maxHealth;
-                    h.maxHealth = p.constitution * 10;
-                    h.currentHealth = (int) Math.floor(h.maxHealth * hP);
-                    clientEntity.saveComponent(h);
-                }
+                updateHealth(clientEntity, h, p);
             }
         }
 
         super.initialise();
+    }
+
+    /**
+     * Sets the health and maximum health values as components of the PhysicalStats constitution stat.
+     * @param e The entity (i.e. player) to update
+     * @param h The health stats of the player
+     * @param p The physical stats of the player
+     * @return True if changed, false if unchanged
+     */
+    public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p)
+    {
+        if (h.maxHealth != p.constitution * 10) {
+            float hP = (float) h.currentHealth / (float) h.maxHealth;
+            h.maxHealth = p.constitution * 10;
+            h.currentHealth = (int) Math.floor(h.maxHealth * hP);
+            e.saveComponent(h);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -108,11 +120,7 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         // current health is above the maximum health, set the current equal to the max.
         if (player.hasComponent(HealthComponent.class)) {
             HealthComponent h = player.getComponent(HealthComponent.class);
-
-            float hP = (float) h.currentHealth / (float) h.maxHealth;
-            h.maxHealth = phyStats.constitution * 10;
-            h.currentHealth = (int) Math.floor(h.maxHealth * hP);
-            player.saveComponent(h);
+            updateHealth(player, h, phyStats);
         }
     }
 
