@@ -24,7 +24,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.logic.characters.GetMaxSpeedEvent;
-import org.terasology.logic.health.BeforeDamagedEvent;
+import org.terasology.logic.health.event.BeforeDamagedEvent;
 import org.terasology.logic.health.HealthComponent;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.physicalstats.component.PhysicalStatsComponent;
