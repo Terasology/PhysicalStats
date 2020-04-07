@@ -81,11 +81,11 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      */
     public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p)
     {
-        int newHealth = p.constitution * constitutionMultiplier;
-        if (h.maxHealth != newHealth) {
-            float hP = (float) h.currentHealth / (float) h.maxHealth;
-            h.maxHealth = newHealth;
-            h.currentHealth = (int) Math.floor(newHealth * hP);
+        int newMaxHealth = p.constitution * constitutionMultiplier;
+        if (h.maxHealth != newMaxHealth) {
+            float healthPercentage = (float) h.currentHealth / (float) h.maxHealth;
+            h.maxHealth = newMaxHealth;
+            h.currentHealth = (int) Math.floor(newMaxHealth * healthPercentage);
             e.saveComponent(h);
             return true;
         }
