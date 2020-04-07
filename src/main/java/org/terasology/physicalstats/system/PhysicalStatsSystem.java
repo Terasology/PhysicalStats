@@ -43,6 +43,11 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      */
     private static final Logger logger = LoggerFactory.getLogger(PhysicalStatsSystem.class);
 
+    /**
+     * The value to multiply the constitution stat by for the maximum health. 10 by default.
+     */
+    public static int constitutionMultiplier = 10;
+
     @In
     private EntityManager entityManager;
 
@@ -59,18 +64,32 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
             // For every entity that has a health component, set their max health equal to CON * 10.
             if (clientEntity.hasComponent(HealthComponent.class)) {
                 HealthComponent h = clientEntity.getComponent(HealthComponent.class);
-
-                // This check is in place so that the current health isn't reset to max health when reloading a game
-                // save. It should only be done when the two are already equal.
-                if (h.currentHealth == h.maxHealth) {
-                    h.maxHealth = clientEntity.getComponent(PhysicalStatsComponent.class).constitution * 10;
-                    h.currentHealth = h.maxHealth;
-                    clientEntity.saveComponent(h);
-                }
+                PhysicalStatsComponent p = clientEntity.getComponent(PhysicalStatsComponent.class);
+                updateHealth(clientEntity, h, p);
             }
         }
 
         super.initialise();
+    }
+
+    /**
+     * Sets the health and maximum health values as components of the PhysicalStats constitution stat.
+     * @param e The entity (i.e. player) to update
+     * @param h The health stats of the player
+     * @param p The physical stats of the player
+     * @return True if changed, false if unchanged
+     */
+    public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p)
+    {
+        int newMaxHealth = p.constitution * constitutionMultiplier;
+        if (h.maxHealth != newMaxHealth) {
+            float healthPercentage = (float) h.currentHealth / (float) h.maxHealth;
+            h.maxHealth = newMaxHealth;
+            h.currentHealth = (int) Math.floor(newMaxHealth * healthPercentage);
+            e.saveComponent(h);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -86,10 +105,7 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         // If the player entity has a health component, make sure that the max health is equal to CON * 10, and the
         // current health is equal to the maximum.
         if (player.hasComponent(HealthComponent.class)) {
-            HealthComponent h = player.getComponent(HealthComponent.class);
-            h.maxHealth = phyStats.constitution * 10;
-            h.currentHealth = h.maxHealth;
-            player.saveComponent(h);
+            updateHealth(player, player.getComponent(HealthComponent.class), phyStats);
         }
     }
 
@@ -107,12 +123,7 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
         // current health is above the maximum health, set the current equal to the max.
         if (player.hasComponent(HealthComponent.class)) {
             HealthComponent h = player.getComponent(HealthComponent.class);
-            h.maxHealth = phyStats.constitution * 10;
-
-            if (h.currentHealth > h.maxHealth) {
-                h.currentHealth = h.maxHealth;
-            }
-            player.saveComponent(h);
+            updateHealth(player, h, phyStats);
         }
     }
 
