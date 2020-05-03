@@ -4,7 +4,9 @@
     "author" : "XTariq",
     "displayName" : "PhysicalStats",
     "description" : "Adds a basic RPG stat system for seven physical attributes or stats.",
-    "dependencies" : [],
+    "dependencies" : [
+        {"id" : "Health", "minVersion" : "0.1.0"}
+    ],
     "serverSideOnly" : false,
     "isLibrary": true
 }
