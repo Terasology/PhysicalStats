@@ -1,37 +1,24 @@
-/*
- * Copyright 2016 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.physicalstats.system;
 
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.logic.characters.GetMaxSpeedEvent;
-import org.terasology.logic.health.event.BeforeDamagedEvent;
-import org.terasology.logic.health.HealthComponent;
-import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.characters.GetMaxSpeedEvent;
+import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
+import org.terasology.engine.registry.In;
+import org.terasology.health.logic.HealthComponent;
+import org.terasology.health.logic.event.BeforeDamagedEvent;
 import org.terasology.physicalstats.component.PhysicalStatsComponent;
 import org.terasology.physicalstats.component.PhysicalStatsModifierComponent;
 import org.terasology.physicalstats.component.PhysicalStatsModifiersListComponent;
 import org.terasology.physicalstats.event.OnConstitutionChangedEvent;
-import org.terasology.registry.In;
 
 /**
  * This system handles the initialization of physical stats and the impact they have on certain actions.
@@ -74,13 +61,13 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
 
     /**
      * Sets the health and maximum health values as components of the PhysicalStats constitution stat.
+     *
      * @param e The entity (i.e. player) to update
      * @param h The health stats of the player
      * @param p The physical stats of the player
      * @return True if changed, false if unchanged
      */
-    public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p)
-    {
+    public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p) {
         int newMaxHealth = p.constitution * constitutionMultiplier;
         if (h.maxHealth != newMaxHealth) {
             float healthPercentage = (float) h.currentHealth / (float) h.maxHealth;
@@ -96,9 +83,9 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      * When an entity (with physical stats) has been spawned following world generation or respawned following death,
      * perform some initialization tasks related to their stats.
      *
-     * @param event     Event indicating the player has just been spawned.
-     * @param player    Reference to the player entity that has been spawned.
-     * @param phyStats  The physical stats of the player entity.
+     * @param event Event indicating the player has just been spawned.
+     * @param player Reference to the player entity that has been spawned.
+     * @param phyStats The physical stats of the player entity.
      */
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, PhysicalStatsComponent phyStats) {
@@ -113,9 +100,9 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      * When a character entity's (with physical stats) constitution attribute is changed, update the related stats like
      * health.
      *
-     * @param event     Event indicating the character's constitution has been altered.
-     * @param player    Reference to the character entity that was affected.
-     * @param phyStats  The physical stats of the character entity.
+     * @param event Event indicating the character's constitution has been altered.
+     * @param player Reference to the character entity that was affected.
+     * @param phyStats The physical stats of the character entity.
      */
     @ReceiveEvent
     public void onCONChanged(OnConstitutionChangedEvent event, EntityRef player, PhysicalStatsComponent phyStats) {
@@ -131,8 +118,8 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      * Before this entity deals damage to another entity, apply the impact that their total strength attribute has on
      * the total or final damage value.
      *
-     * @param event         Event with information of the instigator and current base damage (without stat influence).
-     * @param damageTarget  Entity that's being targeted for an attack.
+     * @param event Event with information of the instigator and current base damage (without stat influence).
+     * @param damageTarget Entity that's being targeted for an attack.
      */
     @ReceiveEvent
     public void impactOnPhysicalDamage(BeforeDamagedEvent event, EntityRef damageTarget) {
@@ -165,9 +152,9 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      * Before this entity (with physical stats) moves, apply the impact that their total agility attribute has on their
      * maximum movement speed.
      *
-     * @param event     Event with information of the current (and modifiable) movement speed.
-     * @param entity    Entity that's intending to move.
-     * @param phy       The physical stats of the entity.
+     * @param event Event with information of the current (and modifiable) movement speed.
+     * @param entity Entity that's intending to move.
+     * @param phy The physical stats of the entity.
      */
     @ReceiveEvent
     public void impactOnSpeed(GetMaxSpeedEvent event, EntityRef entity, PhysicalStatsComponent phy) {

@@ -1,37 +1,24 @@
-/*
- * Copyright 2016 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.physicalstats.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.console.commandSystem.annotations.Command;
-import org.terasology.logic.console.commandSystem.annotations.CommandParam;
-import org.terasology.logic.permission.PermissionManager;
-import org.terasology.logic.players.LocalPlayer;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
+import org.terasology.engine.logic.permission.PermissionManager;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.registry.In;
 import org.terasology.physicalstats.component.PhysicalStatsComponent;
 import org.terasology.physicalstats.event.OnAgilityChangedEvent;
 import org.terasology.physicalstats.event.OnConstitutionChangedEvent;
 import org.terasology.physicalstats.event.OnPhysicalStatChangedEvent;
 import org.terasology.physicalstats.event.OnStrengthChangedEvent;
-import org.terasology.registry.CoreRegistry;
-import org.terasology.registry.In;
 
 /**
  * This system handles cheat or debug commands related to the physical stats system.
@@ -49,7 +36,8 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Print all of the current base physical stats of the local player to the console window.
      */
-    @Command(shortDescription = "Show all stats of the local player", requiredPermission = PermissionManager.CHEAT_PERMISSION)
+    @Command(shortDescription = "Show all stats of the local player", requiredPermission =
+            PermissionManager.CHEAT_PERMISSION)
     public void getPlayerStats() {
         // Get the local player's character entity, and get the PhysicalStatsComponent from it to print the base stat
         // attributes.
@@ -65,7 +53,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Set the local player's base strength attribute to the given amount.
      *
-     * @param amount    The new strength value.
+     * @param amount The new strength value.
      */
     @Command(shortDescription = "Set physical STR stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setSTR(@CommandParam("amount") int amount) {
@@ -92,7 +80,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Set the local player's base dexterity attribute to the given amount.
      *
-     * @param amount    The new dexterity value.
+     * @param amount The new dexterity value.
      */
     @Command(shortDescription = "Set physical DEX stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setDEX(@CommandParam("amount") int amount) {
@@ -118,7 +106,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Set the local player's base constitution attribute to the given amount.
      *
-     * @param amount    The new constitution value.
+     * @param amount The new constitution value.
      */
     @Command(shortDescription = "Set physical CON stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setCON(@CommandParam("amount") int amount) {
@@ -146,7 +134,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Set the local player's base agility attribute to the given amount.
      *
-     * @param amount    The new agility value.
+     * @param amount The new agility value.
      */
     @Command(shortDescription = "Set physical AGI stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setAGI(@CommandParam("amount") int amount) {
@@ -174,7 +162,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Set the local player's base endurance attribute to the given amount.
      *
-     * @param amount    The new endurance value.
+     * @param amount The new endurance value.
      */
     @Command(shortDescription = "Set physical END stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setEND(@CommandParam("amount") int amount) {
@@ -200,7 +188,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Set the local player's base charisma attribute to the given amount.
      *
-     * @param amount    The new charisma value.
+     * @param amount The new charisma value.
      */
     @Command(shortDescription = "Set physical CHA stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setCHA(@CommandParam("amount") int amount) {
@@ -226,7 +214,7 @@ public class PhysicalStatsSystemCommands extends BaseComponentSystem {
     /**
      * Set the local player's base luck attribute to the given amount.
      *
-     * @param amount    The new luck value.
+     * @param amount The new luck value.
      */
     @Command(shortDescription = "Set physical LUK stat.", requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public void setLUK(@CommandParam("amount") int amount) {
