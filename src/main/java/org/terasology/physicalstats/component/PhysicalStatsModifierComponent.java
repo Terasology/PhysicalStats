@@ -4,7 +4,7 @@ package org.terasology.physicalstats.component;
 
 import org.terasology.engine.entitySystem.Component;
 import org.terasology.engine.network.Replicate;
-import org.terasology.reflection.MappedContainer;
+import org.terasology.nui.reflection.MappedContainer;
 
 /**
  * This component is used for storing information about a particular physical stats modifier. This modifier can be
