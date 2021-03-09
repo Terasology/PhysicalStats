@@ -15,7 +15,7 @@
  */
 package org.terasology.physicalstats.component;
 
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 
 /**
  * Interface for the application of physical stat modifiers over a period of time.

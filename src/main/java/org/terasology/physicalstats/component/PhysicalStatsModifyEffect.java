@@ -15,10 +15,10 @@
  */
 package org.terasology.physicalstats.component;
 
-import org.terasology.context.Context;
-import org.terasology.engine.Time;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.delay.DelayManager;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.core.Time;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.delay.DelayManager;
 import org.terasology.physicalstats.event.OnPhysicalStatsModifierAddedEvent;
 import org.terasology.physicalstats.event.OnPhysicalStatsModifierRemovedEvent;
 
