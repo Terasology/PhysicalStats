@@ -37,4 +37,15 @@ public class PhysicalStatsComponent implements Component<PhysicalStatsComponent>
     /** The luck stat will provide benefits to many different actions in the future. */
     @Replicate
     public int luck;
+
+    @Override
+    public void copy(PhysicalStatsComponent other) {
+        this.strength = other.strength;
+        this.dexterity = other.dexterity;
+        this.constitution = other.constitution;
+        this.agility = other.agility;
+        this.endurance = other.endurance;
+        this.charisma = other.charisma;
+        this.luck = other.luck;
+    }
 }
