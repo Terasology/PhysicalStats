@@ -39,7 +39,7 @@ public class PhysicalStatsComponent implements Component<PhysicalStatsComponent>
     public int luck;
 
     @Override
-    public void copy(PhysicalStatsComponent other) {
+    public void copyFrom(PhysicalStatsComponent other) {
         this.strength = other.strength;
         this.dexterity = other.dexterity;
         this.constitution = other.constitution;

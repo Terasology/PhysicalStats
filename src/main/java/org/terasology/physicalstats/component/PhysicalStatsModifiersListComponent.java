@@ -3,7 +3,6 @@
 package org.terasology.physicalstats.component;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import org.terasology.gestalt.entitysystem.component.Component;
 
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public class PhysicalStatsModifiersListComponent implements Component<PhysicalSt
     public Map<String, PhysicalStatsModifierComponent> modifiers = new HashMap<String, PhysicalStatsModifierComponent>();
 
     @Override
-    public void copy(PhysicalStatsModifiersListComponent other) {
+    public void copyFrom(PhysicalStatsModifiersListComponent other) {
         other.modifiers = Maps.newHashMap(other.modifiers);
     }
 }
