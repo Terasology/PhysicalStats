@@ -16,7 +16,7 @@
 package org.terasology.physicalstats.event;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 
 /**
  * This event is sent to an entity when there's a change in one or more of its physical stats.
