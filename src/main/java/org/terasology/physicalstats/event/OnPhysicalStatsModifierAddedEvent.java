@@ -11,7 +11,7 @@ import org.terasology.physicalstats.component.PhysicalStatsModifierComponent;
  */
 public class OnPhysicalStatsModifierAddedEvent implements Event {
     /** A reference to the entity who added the physical stats modifier. */
-    private EntityRef instigator;
+    private final EntityRef instigator;
 
     /** A reference to the entity that had the physical stats modifier added to it. */
     private EntityRef character;

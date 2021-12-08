@@ -10,10 +10,10 @@ import org.terasology.gestalt.entitysystem.event.Event;
  */
 public class OnStrengthChangedEvent implements Event {
     /** A reference to the entity who caused the strength attribute change. */
-    private EntityRef instigator;
+    private final EntityRef instigator;
 
     /** A reference to the entity whose strength attribute has been affected. */
-    private EntityRef character;
+    private final EntityRef character;
 
     /** The old strength attribute value before the change. */
     private int originalValue;

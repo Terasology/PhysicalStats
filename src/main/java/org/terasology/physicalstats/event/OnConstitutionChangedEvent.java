@@ -10,10 +10,10 @@ import org.terasology.gestalt.entitysystem.event.Event;
  */
 public class OnConstitutionChangedEvent implements Event {
     /** A reference to the entity who caused the constitution attribute change. */
-    private EntityRef instigator;
+    private final EntityRef instigator;
 
     /** A reference to the entity whose constitution attribute has been affected. */
-    private EntityRef character;
+    private final EntityRef character;
 
     /** The old constitution attribute value before the change. */
     private int originalValue;

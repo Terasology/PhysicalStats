@@ -10,10 +10,10 @@ import org.terasology.gestalt.entitysystem.event.Event;
  */
 public class OnAgilityChangedEvent implements Event {
     /** A reference to the entity who caused the agility attribute change. */
-    private EntityRef instigator;
+    private final EntityRef instigator;
 
     /** A reference to the entity whose agility attribute has been affected. */
-    private EntityRef character;
+    private final EntityRef character;
 
     /** The old agility attribute value before the change. */
     private int originalValue;

@@ -11,7 +11,7 @@ import org.terasology.physicalstats.component.PhysicalStatsModifierComponent;
  */
 public class OnPhysicalStatsModifierRemovedEvent implements Event {
     /** A reference to the entity who removed the physical stats modifier. */
-    private EntityRef instigator;
+    private final EntityRef instigator;
 
     /** A reference to the entity that had the physical stats modifier removed from it. */
     private EntityRef character;
