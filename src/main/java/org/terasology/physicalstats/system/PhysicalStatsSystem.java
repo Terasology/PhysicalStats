@@ -1,18 +1,5 @@
-/*
- * Copyright 2016 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.physicalstats.system;
 
 import org.slf4j.Logger;
@@ -39,14 +26,14 @@ import org.terasology.physicalstats.event.OnConstitutionChangedEvent;
 @RegisterSystem
 public class PhysicalStatsSystem extends BaseComponentSystem {
     /**
+     * The value to multiply the constitution stat by for the maximum health. 10 by default.
+     */
+    public static final int CONSTITUTION_MULTIPLIER = 10;
+
+    /**
      * Define a logger for logging debug information about this system.
      */
     private static final Logger logger = LoggerFactory.getLogger(PhysicalStatsSystem.class);
-
-    /**
-     * The value to multiply the constitution stat by for the maximum health. 10 by default.
-     */
-    public static int constitutionMultiplier = 10;
 
     @In
     private EntityManager entityManager;
@@ -79,9 +66,8 @@ public class PhysicalStatsSystem extends BaseComponentSystem {
      * @param p The physical stats of the player
      * @return True if changed, false if unchanged
      */
-    public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p)
-    {
-        int newMaxHealth = p.constitution * constitutionMultiplier;
+    public boolean updateHealth(EntityRef e, HealthComponent h, PhysicalStatsComponent p) {
+        int newMaxHealth = p.constitution * CONSTITUTION_MULTIPLIER;
         if (h.maxHealth != newMaxHealth) {
             float healthPercentage = (float) h.currentHealth / (float) h.maxHealth;
             h.maxHealth = newMaxHealth;
